@@ -1,0 +1,86 @@
+enum BidLineStatus {
+  VACANT
+  POSTED
+  ASSIGNED
+  RETIRED
+  READY_TO_POST
+  DELETED
+  TRANSITION
+  NEW_HIRE
+}
+
+enum BidLineOption {
+  NEW_HIRE_PENDING_TRAINING
+  NEW_HIRE_BID_LINE
+}
+
+enum RetirementReason {
+  ABOLISH_BIDLINE_REALIGNMENT
+  ABOLISH_BIDLINE_VACANT
+  ABOLISH_BIDLINE_EMPLOYEE_FURLOUGHED
+  ABOLISH_BIDLINE_VACANT_HOURS_CHANGED
+  ABOLISH_BIDLINE_DAYS_OFF_CHANGED
+  ABOLISH_BIDLINE_ERROR_ON_BIDLINE
+  TEMPORARY_VACANCY_ASSIGNMENT_CANCELED
+  ERROR_ON_QUANTITY_REQUESTED
+  RETIRED_SEMI_ANNUAL
+  RETIRED_ANNUAL
+  ABOLISH_BIDLINE
+}
+
+type BidLine {
+  id: ID!
+  bidLineId: String! # 🔹 Added to match your GraphQL query
+  status: BidLineStatus
+  bidLine: String!
+  station: String!
+  bidLocation: String
+  classification: String
+  shift: String
+  hours: String
+  retirementReason: RetirementReason
+  effectiveRetirementDate: AWSDateTime
+  bidLineNotes: String
+  brief: String
+  bidLineOptions: [BidLineOption!]
+  numberOfShifts: Int
+  daysOff: String
+  updatedBy: ID!
+  relatedRequestApproval: ID
+  bidLocationGroup: String
+}
+
+type BidLineRequestsApprovals {
+  id: ID!
+  bidLocationGroup: String
+}
+
+input UpdateBidLineInput {
+  bidLocation: String
+  numberOfShifts: Int
+  daysOff: String
+}
+
+type Mutation {
+  createBidLine(
+    bidLineId: String!
+    bidLine: String!
+    station: String!
+    bidLocation: String
+    numberOfShifts: Int
+    daysOff: String
+  ): BidLine
+  updateBidLine(bidLineId: String!, station: String!, input: UpdateBidLineInput!): BidLine
+  deleteBidLine(bidLineId: String!, station: String!): BidLine
+}
+
+type Query {
+  getBidLine(bidLineId: String!, station: String!): BidLine
+  listBidLines: [BidLine]
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
