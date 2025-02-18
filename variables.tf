@@ -8,7 +8,7 @@ variable "visibility" {}
 variable "tags" {}
 
 variable "aws_region" {
-  description = "AWS region where resources will be deployed"
+  description = "AWS region"
   type        = string
 }
 
